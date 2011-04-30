@@ -38,6 +38,6 @@ abstract class AbstractSortedSet<E>
     }
 
     public Comparator<? super E> comparator() {
-	return null;
+	return null;  // uses natural ordering
     }
 }

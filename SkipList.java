@@ -8,7 +8,7 @@
 import java.util.*;
 
 public class SkipList<E> extends AbstractSortedSet<E> {
-    private SkipListNode head;
+    private SkipListNode<E> head;
     private int maxLevel;
     private int size;
     
@@ -16,7 +16,7 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	size = 0;
 	maxLevel = 0;
 	// a SkipListNode with value null marks the beginning
-	head = new SkipListNode(null);
+	head = new SkipListNode<E>(null);
 	// null marks the end
 	head.nextNodes.add(null); 
     }
@@ -36,7 +36,7 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	    head.nextNodes.add(null);
 	    maxLevel++;
 	}
-	SkipListNode newNode = new SkipListNode(e);
+	SkipListNode newNode = new SkipListNode<E>(e);
 	SkipListNode current = head;
       	do {
 	    current = findNext(e,current,level);
@@ -62,13 +62,13 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 
     // Returns the node at a given level with highest value less than e
     private SkipListNode findNext(E e, SkipListNode current, int level) {
-        SkipListNode next = current.nextNodes.get(level);
+        SkipListNode next = (SkipListNode)current.nextNodes.get(level);
 	while(next != null) {
-	    E value = next.getValue();
+	    E value = (E)next.getValue();
 	    if(lessThan(e,value)) // e < value
 		break;
 	    current = next;
-	    next = current.nextNodes.get(level);
+	    next = (SkipListNode)current.nextNodes.get(level);
 	}
 	return current;
     }
@@ -82,7 +82,7 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	SkipListNode node = find(e);
 	return node != null &&
 	    node.getValue() != null &&
-	    equalTo(node.getValue(),e);
+	    equalTo((E)node.getValue(),e);
     }
 
     public Iterator<E> iterator() {
@@ -103,32 +103,6 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 
     private boolean greaterThan(E a, E b) {
 	return ((Comparable)a).compareTo(b) > 0;
-    }
-
-/******************************************************************************
-* SkipListNode                                                                *
-******************************************************************************/
-    
-    class SkipListNode {
-	private E value;
-	public List<SkipListNode> nextNodes;
-	
-	public E getValue() {
-	    return value;
-	}
-
-	public SkipListNode(E value) {
-	    this.value = value;
-	    nextNodes = new ArrayList<SkipListNode>();
-	}
-
-	public int level() {
-	    return nextNodes.size()-1;
-	}
-
-	public String toString() {
-	    return "SLN: " + value;
-	}
     }
 
 /******************************************************************************

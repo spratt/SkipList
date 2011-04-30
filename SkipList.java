@@ -15,9 +15,9 @@ public class SkipList<E> extends AbstractSortedSet<E> {
     public SkipList() {
 	size = 0;
 	maxLevel = 0;
-	// a skiplistnode with value null marks the beginning
+	// a SkipListNode with value null marks the beginning
 	head = new SkipListNode(null);
-	// a null skiplistnode marks the end
+	// null marks the end
 	head.nextNodes.add(null); 
     }
 
@@ -42,17 +42,14 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	return true;
     }
 
-    // Returns either
-    //  - the skiplist node with value e
-    //  - the skiplist node with greatest value less than e
+    // Returns the skiplist node with greatest value <= e
     private SkipListNode find(E e) {
 	return find(e,head,maxLevel);
     }
 
-    private SkipListNode find(E e, SkipListNode start, int beginLevel) {
-	SkipListNode current = start;
-	SkipListNode next = null;
-	int level = beginLevel;
+    // Returns the skiplist node with greatest value <= e
+    // Starts at node start and level
+    private SkipListNode find(E e, SkipListNode current, int level) {
 	do {
 	    current = findNext(e,current,level);
 	} while(level-- > 0);
@@ -64,7 +61,7 @@ public class SkipList<E> extends AbstractSortedSet<E> {
         SkipListNode next = current.nextNodes.get(level);
 	while(next != null) {
 	    E value = next.getValue();
-	    if(((Comparable)e).compareTo(value) > 0)
+	    if(lessThan(e,value)) // e < value
 		break;
 	    current = next;
 	    next = current.nextNodes.get(level);
@@ -77,10 +74,23 @@ public class SkipList<E> extends AbstractSortedSet<E> {
     }
 
     public boolean contains(Object o) {
-	SkipListNode node = find((E)o);
+	E e = (E)o;
+	SkipListNode node = find(e);
 	return node != null &&
 	    node.getValue() != null &&
-	    ((Comparable)node.getValue()).compareTo(o) == 0;
+	    equalTo(node.getValue(),e);
+    }
+
+    private boolean lessThan(E a, E b) {
+	return ((Comparable)a).compareTo(b) < 0;
+    }
+
+    private boolean equalTo(E a, E b) {
+	return ((Comparable)a).compareTo(b) == 0;
+    }
+
+    private boolean greaterThan(E a, E b) {
+	return ((Comparable)a).compareTo(b) > 0;
     }
 
     class SkipListNode {
@@ -108,12 +118,14 @@ public class SkipList<E> extends AbstractSortedSet<E> {
     // Testing
     public static void main(String[] args) {
 	SkipList testList = new SkipList<Integer>();
+	testList.add(1);
+	testList.add(4);
 	System.out.println(testList.find(2));
-	System.out.println(testList.contains(2));
-	System.out.println(testList.add(2));
+	//System.out.println(testList.contains(2));
+        testList.add(2);
 	//SkipList.SkipListNode sln = testList.find(2);
 	//System.out.println(sln.nextNodes.get(0));
 	System.out.println(testList.find(2));
-	System.out.println(testList.contains(2));
+	//System.out.println(testList.contains(2));
     }
 }

@@ -21,6 +21,10 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	head.nextNodes.add(null); 
     }
 
+    public SkipListNode getHead() {
+	return head;
+    }
+
     // Adds e to the skiplist.
     // Returns false if already in skiplist, true otherwise.
     public boolean add(E e) {
@@ -81,6 +85,14 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	    equalTo(node.getValue(),e);
     }
 
+    public Iterator<E> iterator() {
+	return new SkipListIterator(this);
+    }
+    
+/******************************************************************************
+* Utility Functions                                                           *
+******************************************************************************/
+
     private boolean lessThan(E a, E b) {
 	return ((Comparable)a).compareTo(b) < 0;
     }
@@ -93,6 +105,10 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	return ((Comparable)a).compareTo(b) > 0;
     }
 
+/******************************************************************************
+* SkipListNode                                                                *
+******************************************************************************/
+    
     class SkipListNode {
 	private E value;
 	public List<SkipListNode> nextNodes;
@@ -115,17 +131,33 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	}
     }
 
-    // Testing
+/******************************************************************************
+* Testing                                                                     *
+******************************************************************************/
+
     public static void main(String[] args) {
 	SkipList testList = new SkipList<Integer>();
-	testList.add(1);
+        System.out.println(testList);
 	testList.add(4);
-	System.out.println(testList.find(2));
-	//System.out.println(testList.contains(2));
+        System.out.println(testList);
+	testList.add(1);
+        System.out.println(testList);
         testList.add(2);
-	//SkipList.SkipListNode sln = testList.find(2);
-	//System.out.println(sln.nextNodes.get(0));
-	System.out.println(testList.find(2));
-	//System.out.println(testList.contains(2));
+        System.out.println(testList);
+	testList = new SkipList<String>();
+        System.out.println(testList);
+	testList.add("hello");
+        System.out.println(testList);
+	testList.add("beautiful");
+        System.out.println(testList);
+        testList.add("world");
+        System.out.println(testList);
+    }
+
+    public String toString() {
+	String s = "SkipList: ";
+	for(Object o : this)
+	    s += o + ", ";
+	return s.substring(0,s.length()-2);
     }
 }

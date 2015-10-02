@@ -12,6 +12,8 @@ public class SkipList<E> extends AbstractSortedSet<E> {
     private int maxLevel;
     private int size;
     
+    private static final double PROBABILITY = 0.5;
+    
     public SkipList() {
 	size = 0;
 	maxLevel = 0;
@@ -31,7 +33,9 @@ public class SkipList<E> extends AbstractSortedSet<E> {
 	if(contains(e)) return false;
 	size++;
 	// random number from 0 to maxLevel+1 (inclusive)
-	int level = (new Random()).nextInt(maxLevel+2); 
+	int level = 0; 
+	while (Math.random() < PROBABILITY)
+		level++;
 	while(level > maxLevel) { // should only happen once
 	    head.nextNodes.add(null);
 	    maxLevel++;

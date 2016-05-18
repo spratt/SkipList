@@ -7,10 +7,10 @@
 
 import java.util.*;
 
-public class SkipListIterator<E> implements Iterator<E> {
+public class SkipListIterator<E extends Comparable<E>> implements Iterator<E> {
     SkipList<E> list;
     SkipListNode<E> current;
-    
+
     public SkipListIterator(SkipList<E> list) {
 	this.list = list;
 	this.current = list.getHead();

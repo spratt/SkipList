@@ -7,13 +7,13 @@
 
 import java.util.*;
 
-public class SkipList<E> extends AbstractSortedSet<E> {
+public class SkipList<E extends Comparable<E>> extends AbstractSortedSet<E> {
     private SkipListNode<E> head;
     private int maxLevel;
     private int size;
-    
+
     private static final double PROBABILITY = 0.5;
-    
+
     public SkipList() {
 	size = 0;
 	maxLevel = 0;
@@ -92,21 +92,21 @@ public class SkipList<E> extends AbstractSortedSet<E> {
     public Iterator<E> iterator() {
 	return new SkipListIterator(this);
     }
-    
+
 /******************************************************************************
 * Utility Functions                                                           *
 ******************************************************************************/
 
     private boolean lessThan(E a, E b) {
-	return ((Comparable)a).compareTo(b) < 0;
+	return a.compareTo(b) < 0;
     }
 
     private boolean equalTo(E a, E b) {
-	return ((Comparable)a).compareTo(b) == 0;
+	return a.compareTo(b) == 0;
     }
 
     private boolean greaterThan(E a, E b) {
-	return ((Comparable)a).compareTo(b) > 0;
+	return a.compareTo(b) > 0;
     }
 
 /******************************************************************************
